@@ -1,14 +1,39 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
+import ProductDetail from '../views/ProductDetail.vue'
+import store from '../store'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/Login',
+    name: 'Login',
+    component: Login
+  },
+  {
+    path: '/Register',
+    name: 'Register',
+    component: Register
+  },
+  {
+    path: '/ProductDetail/:idproduct',
+    name: 'ProductDetail',
+    component: ProductDetail,
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    path: '/Home',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta: {
+      requireAuth: true
+    }
   },
   {
     path: '/about',
@@ -24,6 +49,20 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requireAuth)) {
+    if (store.getters['auth/isLogin']) {
+      next()
+    } else {
+      next({
+        path: '/Login'
+      })
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

@@ -1,0 +1,91 @@
+@font-face{
+    font-family: Airbnb cereal App ;
+    src: url(../font/AirbnbCerealBook.ttf);
+}
+*{
+    margin: 0px;
+    padding:0px;
+    font-family: Airbnb Cereal App;
+} 
+
+.qtycart{
+    background: #57CAD5;
+    border-radius: 50px;
+}
+
+.text-empty{
+    color:#CECECE
+}
+
+.btn-login{
+    background: #F24F8A;
+    border-radius: 10px;
+    color: white;
+    border: white;
+}
+
+.btn-login:hover{
+    background:#FF7BAB;
+}
+
+.btn-create{
+    background: #F24F8A;
+    border-radius: 10px;
+    color: white;
+    border: white;
+}
+
+.btn-create:hover{
+    background:#FF7BAB;
+}
+
+.button-vue{
+    background-color: transparent;
+    border: transparent;
+}
+
+.btn-cancel{
+    background: #F24F8A;
+    border-radius: 10px;
+    color: white;
+    border: white;
+}
+
+.btn-cancel:hover{
+    background:#FF7BAB;
+}
+
+.btn-add{
+    background: #57CAD5;
+    border-radius: 10px;
+    color: white;
+    border: white;
+}
+
+.btn-add:hover{
+    background: #4AEFFF;
+}
+
+.btn-pesan {
+    background: #57CAD5;
+}
+
+.btn-edit {
+    background: #2EE663;
+}
+
+.btn-trash{
+    background: #D81616;
+}
+
+.btn-pesan:hover{
+    background: turquoise;
+}
+
+.btn-edit:hover {
+    background: #6FF295;
+}
+
+.btn-trash:hover {
+    background: #FF4141;
+}
