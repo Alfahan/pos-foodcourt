@@ -30,4 +30,3 @@ https://pos-frontend.netlify.app/home-select.html
 ![Screenshot from 2020-09-12 13-32-26](https://user-images.githubusercontent.com/49190810/92989295-75e3fb80-f4fd-11ea-8d98-294d285a212b.png)
 ![Screenshot from 2020-09-12 13-32-31](https://user-images.githubusercontent.com/49190810/92989297-77adbf00-f4fd-11ea-94df-643679574060.png)
 https://pos-frontend.netlify.app/history.html
-![Screenshot from 2020-09-12 13-32-37](https://user-images.githubusercontent.com/49190810/92989300-7a101900-f4fd-11ea-905f-f650bc87a997.png)
