@@ -1,7 +1,9 @@
 const about = {
   data () {
     return {
-      Judul: 'POSFoodCourt | Copyright@Alfahan'
+      Judul: 'FoodItems',
+      Login: 'Login',
+      Footer: 'POS FoodCourt | Copyright@Alfahan'
     }
   },
   directives: {

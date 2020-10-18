@@ -18,7 +18,7 @@
 
                       <div class="col-md-8">
                         <b-navbar-nav class="align-center">
-                            <h1>Food Items</h1>
+                            <h1>{{ Judul }}</h1>
                         </b-navbar-nav>
                       </div>
 
@@ -56,9 +56,7 @@
         <div class="row shadow">
           <div class="col-md-12 p-3 shadow text-center" >
             <div v-kolor= "'#F24F8A'">
-              <h5>
-                {{ Judul }}
-              </h5>
+                {{ Footer }}
             </div>
           </div>
         </div>

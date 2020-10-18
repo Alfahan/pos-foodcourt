@@ -10,15 +10,15 @@
           <form v-on:submit.prevent="onRegister">
             <div class="form-group">
               <label for="exampleInputEmail1">Email address</label>
-              <input type="email" class="form-control" v-model="form.email" placeholder="Email" aria-describedby="emailHelp">
+              <input type="email" class="form-control" v-model="form.email" placeholder="Email" aria-describedby="emailHelp" required>
             </div>
             <div class="form-group">
               <label for="exampleInputEmail1">Name User</label>
-              <input type="text" class="form-control" v-model="form.nameuser" placeholder="Name" aria-describedby="emailHelp">
+              <input type="text" class="form-control" v-model="form.nameuser" placeholder="Name" required>
             </div>
             <div class="form-group">
               <label for="exampleInputPassword1">Password</label>
-              <input type="password" v-model="form.password" placeholder="Password" class="form-control" >
+              <input type="password" v-model="form.password" placeholder="Password" class="form-control" required>
             </div>
             <button type="submit" class="btn btn-create btn-primary">Create Account</button>
             <router-link class="nav-link" to="/Login">
@@ -34,6 +34,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import Swal from 'sweetalert2'
 
 export default {
   data () {
@@ -49,17 +50,30 @@ export default {
     onRegister () {
       this.actRegister(this.form)
         .then((response) => {
-          alert('Register Success, Please Login')
+          this.alertActive()
           window.location = '/Login'
         })
         .catch((err) => {
-          alert('Register Failed')
-          console.log(err)
+          this.alertError(err)
         })
     },
     ...mapActions({
       actRegister: 'auth/register'
-    })
+    }),
+    alertActive () {
+      Swal.fire({
+        icon: 'success',
+        title: 'Your Registration Success',
+        text: 'Please Check Your Email to Activate'
+      })
+    },
+    alertError () {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops..',
+        text: 'Something Went Wrong!'
+      })
+    }
   }
 }
 </script>

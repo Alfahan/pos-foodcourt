@@ -3,7 +3,8 @@ import { url } from '../../helpers/env'
 
 const state = () => {
   return {
-    token: localStorage.getItem('token') || null
+    token: localStorage.getItem('token') || null,
+    refreshToken: localStorage.getItem('refreshToken') || null
   }
 }
 
@@ -24,23 +25,26 @@ const actions = {
         .then((response) => {
           resolve(response.data.message)
         })
-        .catch(() => {
-          // eslint-disable-next-line prefer-promise-reject-errors
-          reject('Register Failed')
+        .catch(err => {
+          reject(err.message)
         })
     })
   },
   login (context, payload) {
     return new Promise((resolve, reject) => {
-      axios.post(`${url}/users/login`, payload)
+      axios.post(`${url}/users/login`, {
+        email: payload.email,
+        password: payload.password
+      })
         .then((response) => {
+          localStorage.setItem('iduser', response.data.data.iduser)
+          localStorage.setItem('nameuser', response.data.data.nameuser)
           localStorage.setItem('token', response.data.data.token)
+          localStorage.setItem('level', response.data.data.level)
           localStorage.setItem('refreshToken', response.data.data.refreshToken)
           resolve(response.data.message)
-        })
-        .catch(() => {
-          // eslint-disable-next-line prefer-promise-reject-errors
-          reject('Login Failed')
+        }).catch(err => {
+          reject(err.message)
         })
     })
   },
