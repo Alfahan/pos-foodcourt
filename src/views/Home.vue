@@ -23,13 +23,24 @@
                       </div>
 
                       <div class="col-md-4">
-                        <div class="input-group mb-3">
-                          <input  type="text" class="form-control" placeholder="Search Foods" aria-label="Cari" aria-describedby="basic-addon1"   >
-                          <!-- v-model="search" @keyup="searchFoods" -->
-                        <div class="input-group-prepend">
-                          <span class="input-group-text" id="basic-addon1"><b-icon-search></b-icon-search></span>
-                        </div>
-                      </div>
+                        <b-dropdown
+                          id="dropdown-divider"
+                          text="Sort item"
+                          class="m-2"
+                        >
+                          <b-dropdown-item-button @click="sortProduct('nameproduct')"
+                            >Product name</b-dropdown-item-button
+                          >
+                          <b-dropdown-item-button @click="sortProduct('price')"
+                            >Cheapest price</b-dropdown-item-button
+                          >
+                          <b-dropdown-item-button @click="sortProduct('idcategory')"
+                            >Category</b-dropdown-item-button
+                          >
+                          <b-dropdown-item-button @click="sortLatest('DESC')"
+                            >Latest product</b-dropdown-item-button
+                          >
+                        </b-dropdown>
 
                       </div>
 
@@ -49,7 +60,6 @@
                 </div>
               </div>
                 <Cart />
-                <!-- :datacart="addCartData" @addqty="addQty" @minqty="minQty" @refreshdel="getData" @orderdata="orderData" -->
             </div>
 
         </div>
@@ -71,6 +81,7 @@ import about from '../mixins/about'
 import SideBar from '@/components/SideBar.vue'
 import Cart from '@/components/Cart.vue'
 import CardProduct from '@/components/CardProduct.vue'
+import { mapActions } from 'vuex'
 
 export default {
   mixins: [about],
@@ -79,6 +90,34 @@ export default {
     SideBar,
     Cart,
     CardProduct
+  },
+  methods: {
+    ...mapActions({
+      sortProductData: 'products/sortProduct',
+      latestProductData: 'products/latestProduct'
+    }),
+    sortProduct (value) {
+      const data = {
+        sort: value
+      }
+      this.sortProductData(data)
+      this.$router
+        .push({ path: '/', query: { by: value } })
+        .catch((err) => {
+          console.log(err.name)
+        })
+    },
+    sortLatest (value) {
+      const data = {
+        sortLatest: value
+      }
+      this.latestProductData(data)
+      this.$router
+        .push({ path: '/', query: { by: value } })
+        .catch((err) => {
+          console.log(err.name)
+        })
+    }
   }
 }
 </script>

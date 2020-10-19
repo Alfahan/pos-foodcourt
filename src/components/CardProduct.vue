@@ -1,9 +1,14 @@
 <template>
     <div class="row">
         <div class="col-md-12">
+          <form v-on:submit.prevent="">
+            <input type="text" name="search" @keyup="sortSearchData(search)" v-model="search" class="form-control" placeholder="...Search">
+          </form>
+        </div>
+        <div class="col-md-12">
             <div class="row" v-if="allProducts.isLoading">
-                <div class="col-md-12 text-center">
-                    <h2> ...LOADING... </h2>
+                <div class="col-md-12 text-center mt-5">
+                   <b-icon icon="circle-fill" animation="throb" font-scale="4"></b-icon>
                 </div>
             </div>
             <div class="row" v-else>
@@ -46,7 +51,8 @@ import Swal from 'sweetalert2'
 export default {
   data () {
     return {
-      level: localStorage.getItem('level')
+      level: localStorage.getItem('level'),
+      search: ''
     }
   },
   name: 'CardProduct',
@@ -72,7 +78,8 @@ export default {
     },
     ...mapActions({
       actionGetAllProducts: 'products/getProducts',
-      actDeleteProduct: 'products/delProducts'
+      actDeleteProduct: 'products/delProducts',
+      sortSearchData: 'products/sortSearch'
     }),
     alertSuccesDel () {
       Swal.fire({

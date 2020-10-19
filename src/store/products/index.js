@@ -91,6 +91,45 @@ const actions = {
           console.log(err)
         })
     })
+  },
+  sortProduct (context, payload) {
+    context.commit('SET_ALL_LOADING', true)
+    return new Promise((resolve, reject) => {
+      axios.get(`${url}/product/getall?by=${payload.sort}`)
+        .then((response) => {
+          context.commit('SET_ALL_DATA', response.data.data)
+        }).catch(err => {
+          console.log(err)
+        }).finally(() => {
+          context.commit('SET_ALL_LOADING', false)
+        })
+    })
+  },
+  latestProduct (context, payload) {
+    context.commit('SET_ALL_LOADING', true)
+    return new Promise((resolve, reject) => {
+      axios.get(`${url}/product/getall?typesort=${payload.sortLatest}`)
+        .then((response) => {
+          context.commit('SET_ALL_DATA', response.data.data)
+        }).catch(err => {
+          console.log(err)
+        }).finally(() => {
+          context.commit('SET_ALL_LOADING', false)
+        })
+    })
+  },
+  sortSearch (context, payload) {
+    context.commit('SET_ALL_LOADING', true)
+    return new Promise((resolve, reject) => {
+      axios.get(`${url}/product/getall?nameproduct=${payload}`)
+        .then((response) => {
+          context.commit('SET_ALL_DATA', response.data.data)
+        }).catch(err => {
+          console.log(err)
+        }).finally(() => {
+          context.commit('SET_ALL_LOADING', false)
+        })
+    })
   }
 }
 
