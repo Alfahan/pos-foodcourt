@@ -22,7 +22,7 @@ const getters = {
 
 const mutations = {
   SET_ALL_DATA (state, payload) {
-    state.all.data = payload
+    state.all.dataProducts = payload
   },
   SET_ALL_LOADING (state, payload) {
     state.all.isLoading = payload

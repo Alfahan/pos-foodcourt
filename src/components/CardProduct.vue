@@ -1,8 +1,8 @@
 <template>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 mt-4">
           <form v-on:submit.prevent="">
-            <input type="text" name="search" @keyup="sortSearchData(search)" v-model="search" class="form-control" placeholder="...Search">
+            <input type="text" name="search" @keyup="sortSearchData(search)" v-model="search" class="form-control" placeholder="Search...">
           </form>
         </div>
         <div class="col-md-12">
@@ -14,13 +14,13 @@
             <div class="row" v-else>
                 <div class="col-md-12 pl-4 pt-3">
                     <div class="row">
-                        <div class="card m-2 shadow" style="width: 14rem;" v-for="(item, index) in allProducts.data " :key="index">
+                        <div class="card m-2 shadow" style="width: 14rem;" v-for="(item, index) in allProducts.dataProducts " :key="index">
                             <img :src="`http://localhost:3000/${item.img}`" alt="">
                             <div class="card-body p-2">
                                 <h5 class="card-title">{{ item.nameproduct }}</h5>
                                 <p class="card-text">Rp. {{ item.price }}</p>
                                 <div v-if="level == 0">
-                                  <b-button class="btn btn-pesan mr-2">
+                                  <b-button class="btn btn-pesan mr-2" @click="$emit('addtocart', item.idproduct, index)">
                                     <b-icon-cart></b-icon-cart>
                                   </b-button>
                                   <router-link class="btn btn-edit mr-2" :to="`ProductDetail/${item.idproduct}`">
