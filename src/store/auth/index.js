@@ -50,8 +50,11 @@ const actions = {
   },
   logout (context) {
     return new Promise((resolve) => {
-      localStorage.removeItem('refreshToken')
+      localStorage.removeItem('iduser')
+      localStorage.removeItem('nameuser')
       localStorage.removeItem('token')
+      localStorage.removeItem('level')
+      localStorage.removeItem('refreshToken')
       resolve()
     })
   }

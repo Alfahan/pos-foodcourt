@@ -4,10 +4,10 @@
             <img src="../assets/img/menu.png" alt="Fork">
         </b-button>
         <b-sidebar id="sidebar-1" width="80px" shadow>
-        <div class="px-1 py-1">
+        <div class="px-1 py-1" v-if="level == 0">
             <div class="row mt-4">
                 <div class="col-md-12">
-                    <router-link class="nav-link" to="/Home">
+                    <router-link class="nav-link" to="/">
                         <img src="../assets/img/fork.jpg" alt="Fork">
                     </router-link>
                 </div>
@@ -30,6 +30,20 @@
                 </div>
             </div>
         </div>
+        <div class="px-1 py-1" v-else>
+          <div class="row mt-4">
+              <div class="col-md-12">
+                  <router-link class="nav-link" to="/">
+                      <img src="../assets/img/fork.jpg" alt="Fork">
+                  </router-link>
+              </div>
+          </div>
+          <div class="row mt-4">
+              <div class="col-md-12">
+                  <b-button class="button-vue" @click="actLogout()"><img src="../assets/img/Logout.png" width="170%" alt="Fork"></b-button>
+              </div>
+          </div>
+      </div>
     </b-sidebar>
 
     <!-- Modal -->
@@ -40,22 +54,23 @@
                 <div class="form-group row">
                     <label for="name">Name</label>
                     <div class="col-sm-10">
-                        <input type="text" v-model="nameproduct" class="form-control">
+                        <input type="text" v-model="nameproduct" value="" class="form-control">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="price">Price </label>
                     <div class="col-sm-10">
-                        <input type="number" v-model="price" class="form-control">
+                        <input type="number" v-model="price" value="" class="form-control">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="category">Category</label>
                     <div class="col-sm-10">
-                        <b-form-select v-model="idcategory" class="mb-3 category-select">
-                            <b-form-select-option >Please select an option</b-form-select-option>
-                            <b-form-select-option v-for="(item, index) in allCategories" :key="index" :value="item.idcategory" > {{item.idcategory}}|{{item.namecategory}}</b-form-select-option>
-                        </b-form-select>
+                        <select id="category" class="form-control shadow-input" v-model="idcategory">
+                          <option selected value disabled>Choose Category</option>
+                          <option v-for="(item, index) in allCategories" :value="item.idcategory" :key="index"> {{item.namecategory}}
+                          </option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -75,12 +90,14 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'SideBar',
   data () {
     return {
+      level: localStorage.getItem('level'),
       nameproduct: null,
       price: null,
       img: null,
@@ -113,19 +130,47 @@ export default {
       }
     },
     onAddProduct () {
-      const fdat = new FormData()
-      fdat.append('nameproduct', this.nameproduct)
-      fdat.append('price', this.price)
-      fdat.append('img', this.img)
-      fdat.append('idcategory', this.idcategory)
+      const data = {
+        nameproduct: this.nameproduct,
+        price: this.price,
+        img: this.img,
+        idcategory: this.idcategory
+      }
 
-      this.actAddProducts(fdat)
+      this.actAddProducts(data)
         .then((response) => {
-          console.log(response)
-          window.location = '/Home'
+          if (response === 'Image type must JPG ,JPEG, PNG') {
+            this.alertValidation()
+          } else if (response === 'Image size is too big! Please upload another one with size <200kb') {
+            this.alertSize()
+          } else {
+            this.alertSuccesAdd()
+            window.location = '/'
+          }
         }).catch((err) => {
           console.log(err)
         })
+    },
+    alertSuccesAdd () {
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Add Product Success'
+      })
+    },
+    alertValidation () {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Image type must be JPG  JPEG, PNG'
+      })
+    },
+    alertSize () {
+      Swal.fire({
+        icon: 'error',
+        title: 'Image size is too big!',
+        text: 'Please upload another one with size < 200kb'
+      })
     }
   },
   mounted () {

@@ -67,14 +67,18 @@ const actions = {
     })
   },
   addProducts (context, payload) {
+    const fd = new FormData()
+    fd.append('nameproduct', payload.nameproduct)
+    fd.append('price', payload.price)
+    fd.append('img', payload.img)
+    fd.append('idcategory', payload.idcategory)
     return new Promise((resolve, reject) => {
-      axios.post(`${url}/product/insert`, payload)
+      axios.post(`${url}/product/insert`, fd)
         .then((response) => {
           resolve(response.data.message)
         })
-        .catch(() => {
-          // eslint-disable-next-line prefer-promise-reject-errors
-          reject('Insert Failed')
+        .catch((err) => {
+          console.log(err)
         })
     })
   },
@@ -83,9 +87,8 @@ const actions = {
       axios.put(`${url}/product/update/${payload.id}`, payload.form)
         .then((response) => {
           resolve(response.data.message)
-        }).catch(() => {
-          // eslint-disable-next-line prefer-promise-reject-errors
-          reject('Update Gagal')
+        }).catch((err) => {
+          console.log(err)
         })
     })
   }

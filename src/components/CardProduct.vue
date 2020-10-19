@@ -10,19 +10,26 @@
                 <div class="col-md-12 pl-4 pt-3">
                     <div class="row">
                         <div class="card m-2 shadow" style="width: 14rem;" v-for="(item, index) in allProducts.data " :key="index">
-                            <img :src="`http://54.164.193.160:3000/${item.img}`" alt="">
+                            <img :src="`http://localhost:3000/${item.img}`" alt="">
                             <div class="card-body p-2">
                                 <h5 class="card-title">{{ item.nameproduct }}</h5>
                                 <p class="card-text">Rp. {{ item.price }}</p>
-                                <b-button class="btn btn-pesan mr-2">
-                                  <b-icon-cart></b-icon-cart>
-                                </b-button>
-                                <router-link class="btn btn-edit mr-2" :to="`ProductDetail/${item.idproduct}`">
-                                  <b-icon-pencil></b-icon-pencil>
-                                </router-link>
-                                <b-button class="btn btn-trash" @click="onDelete(item.idproduct)">
-                                  <b-icon-trash></b-icon-trash>
-                                </b-button>
+                                <div v-if="level == 0">
+                                  <b-button class="btn btn-pesan mr-2">
+                                    <b-icon-cart></b-icon-cart>
+                                  </b-button>
+                                  <router-link class="btn btn-edit mr-2" :to="`ProductDetail/${item.idproduct}`">
+                                    <b-icon-pencil></b-icon-pencil>
+                                  </router-link>
+                                  <b-button class="btn btn-trash" @click="onDelete(item.idproduct)">
+                                    <b-icon-trash></b-icon-trash>
+                                  </b-button>
+                                </div>
+                                <div v-else>
+                                  <b-button class="btn btn-pesan mr-2">
+                                    <b-icon-cart></b-icon-cart>
+                                  </b-button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -34,8 +41,14 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Swal from 'sweetalert2'
 
 export default {
+  data () {
+    return {
+      level: localStorage.getItem('level')
+    }
+  },
   name: 'CardProduct',
   computed: {
     ...mapGetters({
@@ -48,7 +61,8 @@ export default {
       if (askConfirm === true) {
         this.actDeleteProduct(key)
           .then((response) => {
-            console.log(response)
+            this.alertSuccesDel()
+            window.location = '/'
           }).catch((err) => {
             console.log(err)
           })
@@ -59,7 +73,14 @@ export default {
     ...mapActions({
       actionGetAllProducts: 'products/getProducts',
       actDeleteProduct: 'products/delProducts'
-    })
+    }),
+    alertSuccesDel () {
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Delete Product Success'
+      })
+    }
   },
   mounted () {
     this.actionGetAllProducts()
