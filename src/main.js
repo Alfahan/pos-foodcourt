@@ -22,7 +22,7 @@ axios.defaults.headers = {
 
 // handle token expired
 axios.interceptors.response.use((response) => {
-  if (response.data.message === 'Authorization Failed, Token Expired') {
+  if (response.data.message === 'Token Expired! Please log in again') {
     return new Promise((resolve, reject) => {
       axios.post(`${url}/users/refreshToken`, {
         refreshToken: localStorage.getItem('refreshToken')
@@ -30,7 +30,7 @@ axios.interceptors.response.use((response) => {
         .then(res => {
           resolve()
           localStorage.setItem('token', res.data.data.token)
-          window.location = ''
+          window.location = '/'
         })
         .catch(err => reject(err.message))
     })

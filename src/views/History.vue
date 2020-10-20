@@ -20,31 +20,55 @@
                         <div class="col-md-12 shadow">
                             <div class="history-content">
                                 <div class="history-card">
-                                <div class="content">
-                                    <div class="content-text">
-                                    <p>Today's Income</p>
-                                    <p>Rp. 1.000.000</p>
-                                    <p>+2% yesterday</p>
+                                    <div class="content">
+                                        <div class="content-text">
+                                        <p>Today's Income</p>
+                                        <p>Rp. 1.000.000</p>
+                                        <p>+2% yesterday</p>
+                                        </div>
+                                        <!-- <img src="../assets/elips/pinkviolet.png" alt="elips" /> -->
                                     </div>
-                                    <!-- <img src="../assets/elips/pinkviolet.png" alt="elips" /> -->
-                                </div>
-                                <div class="content">
-                                    <div class="content-text">
-                                    <p>Orders</p>
-                                    <p>3270</p>
-                                    <p>+5% last week</p>
+                                    <div class="content">
+                                        <div class="content-text">
+                                        <p>Orders</p>
+                                        <p>3270</p>
+                                        <p>+5% last week</p>
+                                        </div>
+                                        <!-- <img src="../assets/elips/blue.png" alt="elips" /> -->
                                     </div>
-                                    <!-- <img src="../assets/elips/blue.png" alt="elips" /> -->
-                                </div>
-                                <div class="content">
-                                    <div class="content-text">
-                                    <p>This Years Income</p>
-                                    <p>Rp. 100.000.000</p>
-                                    <p>+10% Last Year</p>
-                                    <!-- <img src="../assets/elips/pinkviolet.png" alt="elips" /> -->
+                                    <div class="content">
+                                        <div class="content-text">
+                                        <p>This Years Income</p>
+                                        <p>Rp. 100.000.000</p>
+                                        <p>+10% Last Year</p>
+                                        <!-- <img src="../assets/elips/pinkviolet.png" alt="elips" /> -->
+                                        </div>
                                     </div>
                                 </div>
+
+                                <div class="col-md-12 col-12" style="margin-top: 50px">
+                                    <div class="row">
+                                        <div class="col-md-6 col-6 text-left">
+                                            <h4><strong>Revenue</strong></h4>
+                                        </div>
+                                        <div class="col-md-6 col-6 text-right">
+                                            <button class="btn btn-sm" style="background: #cecece; border-radius: 10px; font-size:smaller">
+                                                Month
+                                                <img src="assets/img/arrow-down-sign-to-navigate 1.png" alt="">
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <div class="col-md-12 col-12">
+                                    <div class="row">
+                                        <div class="col-md-12 col-12 main-canvas">
+                                            <canvas id="myLineChart" width="300px" height="100px">
+                                            </canvas>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="table">
                                 <table class="table">
                                     <thead>
@@ -59,7 +83,7 @@
                                     <tbody>
                                     <tr v-for="(item, index) in historyMasterData" :key="index">
                                         <th scope="row">{{ item.invoice }}</th>
-                                        <td>{{ item.iduser }}</td>
+                                        <td>{{ item.nameuser }}</td>
                                         <td>{{ item.date }}</td>
                                         <td>
                                         <b-button
@@ -100,8 +124,10 @@
 </template>
 
 <script>
+
 import SideBar from '@/components/SideBar.vue'
 import about from '../mixins/about'
+import Chart from 'chart.js'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -112,7 +138,8 @@ export default {
   },
   data () {
     return {
-      detailHistory: null
+      detailHistory: null,
+      bar: null
     }
   },
   computed: {
@@ -129,13 +156,53 @@ export default {
     historyDetail (id) {
       const detail = this.historyData.filter((e) => e.idhistory === id)
       this.detailHistory = detail
+    },
+    renderChart () {
+      this.bar = new Chart(document.getElementById('myLineChart'), {
+        type: 'line',
+        data: {
+          labels: ['', '', '', '', '', '', '  '],
+          datasets: [
+            {
+              label: 'This Month',
+              fill: false,
+              borderColor: '#00F1FF',
+              data: [0, 20, 10, 29, 21, 40, 15, 42]
+            },
+            {
+              label: 'Last Month',
+              fill: false,
+              borderColor: 'red',
+              data: [10, 30, 5, 35, 38, 12, 21, 12]
+            }
+          ]
+        },
+        options: {
+          legend: {
+            display: true,
+            position: 'bottom'
+          },
+          scales: {
+            xAxes: [{
+              display: false
+            }]
+          },
+          elements: {
+            line: {
+              tension: 0
+            }
+          }
+        }
+      })
     }
   },
   mounted () {
     this.dataHistory()
     this.dataHistoryMaster()
+    this.renderChart()
   }
 }
+
 </script>
 
 <style scoped>
