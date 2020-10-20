@@ -5,7 +5,10 @@ const state = () => {
   return {
     all: {
       dataProducts: [],
-      isLoading: false
+      isLoading: false,
+      isError: false,
+      errorMessage: '',
+      meta: null
     },
     detail: []
   }
@@ -29,16 +32,24 @@ const mutations = {
   },
   SET_DETAIL_DATA (state, payload) {
     state.detail = payload
+  },
+  SET_META (state, payload) {
+    state.all.meta = payload
   }
 }
 
 const actions = {
   getProducts (context, payload) {
+    const fd = {
+      page: payload.page === undefined ? '' : payload.page
+    }
+    console.log(fd.page)
     context.commit('SET_ALL_LOADING', true)
     return new Promise((resolve, reject) => {
-      axios.get(`${url}/product/getall`)
+      axios.get(`${url}/product/getall?page=${fd.page}`)
         .then((response) => {
           context.commit('SET_ALL_DATA', response.data.data)
+          context.commit('SET_META', response.data.meta)
         }).catch((err) => {
           console.log(err)
         }).finally(() => {

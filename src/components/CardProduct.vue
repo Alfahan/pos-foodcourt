@@ -41,6 +41,12 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-12 text-center">
+          <button class="btn btn-primary" @click="paginationBack()">Back</button>
+          <button class="ml-2 btn btn-primary">{{page}}</button>
+          <button class="ml-2 btn btn-primary" @click="paginationNext()">Next</button>
+        </div>
+
     </div>
 </template>
 
@@ -52,7 +58,8 @@ export default {
   data () {
     return {
       level: localStorage.getItem('level'),
-      search: ''
+      search: '',
+      page: 1
     }
   },
   name: 'CardProduct',
@@ -62,6 +69,12 @@ export default {
     })
   },
   methods: {
+    pagi () {
+      const fd = {
+        page: this.currentPage
+      }
+      this.actionGetAllProducts(fd)
+    },
     onDelete (key) {
       const askConfirm = confirm('Do you want to delete this product data?')
       if (askConfirm === true) {
@@ -81,6 +94,28 @@ export default {
       actDeleteProduct: 'products/delProducts',
       sortSearchData: 'products/sortSearch'
     }),
+    paginationNext () {
+      if (this.page >= this.allProducts.meta.totalPage) {
+        alert('Last Page')
+      } else {
+        this.page += 1
+        const fd = {
+          page: this.page
+        }
+        this.actionGetAllProducts(fd)
+      }
+    },
+    paginationBack () {
+      if (this.page <= 1) {
+        alert('First Page')
+      } else {
+        this.page -= 1
+        const fd = {
+          page: this.page
+        }
+        this.actionGetAllProducts(fd)
+      }
+    },
     alertSuccesDel () {
       Swal.fire({
         icon: 'success',
@@ -90,11 +125,15 @@ export default {
     }
   },
   mounted () {
-    this.actionGetAllProducts()
+    this.actionGetAllProducts(' ')
   }
 }
 </script>
 
-<style>
-
+<style scoped>
+.const-pagination {
+  margin-top:10vh;
+  display: flex;
+  justify-content: center;
+}
 </style>
