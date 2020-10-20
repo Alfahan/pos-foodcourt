@@ -31,7 +31,7 @@
                                   </b-button>
                                 </div>
                                 <div v-else>
-                                  <b-button class="btn btn-pesan mr-2">
+                                  <b-button class="btn btn-pesan mr-2" @click="$emit('addtocart', item.idproduct, index)">
                                     <b-icon-cart></b-icon-cart>
                                   </b-button>
                                 </div>

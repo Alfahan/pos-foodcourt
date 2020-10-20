@@ -28,7 +28,6 @@ const mutations = {
 
 const actions = {
   insertHistory (context, payload) {
-    // console.log(payload)
     return new Promise((resolve, reject) => {
       axios.post(`${url}/history/insert`, payload)
         .then(result => {
@@ -36,6 +35,24 @@ const actions = {
         }).catch(err => {
           console.log(err)
         })
+    })
+  },
+  historyDetail (context, payload) {
+    return new Promise((resolve, reject) => {
+      axios.get(`${url}/history/getDetail`).then(result => {
+        context.commit('SET_HISTORY', result.data.data)
+      }).catch(err => {
+        console.log(err)
+      })
+    })
+  },
+  historyMaster (context, payload) {
+    return new Promise((resolve, reject) => {
+      axios.get(`${url}/history/getall`).then(result => {
+        context.commit('SET_HISTORY_MASTER', result.data.data)
+      }).catch(err => {
+        console.log(err)
+      })
     })
   }
 }
