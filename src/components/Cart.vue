@@ -29,26 +29,110 @@
           </div>
         </div>
         <div class="total-price">
-          <h4 class="font-weight-bold">total:</h4>
+          <h4 class="font-weight-bold">Total:</h4>
           <h4 class="font-weight-bold">Rp. {{amount}}</h4>
         </div>
         <p>*Belum termasuk PPN</p>
         <div class="main-cart-button">
-          <button @click.prevent="submitData">Checkout</button>
+          <button id="show-btn" @click="checkOut" >Checkout</button>
           <button>Cancel</button>
         </div>
       </div>
     </div>
+
+    <!-- Modal -->
+      <b-modal ref="my-modal">
+        <div v-if="invoice == 0">
+          <span></span>
+        </div>
+        <div v-else>
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="header p-3">
+                      <div class="row">
+                          <div class="col-md-6 text-left">
+                              <h2><b>Checkout</b></h2>
+                          </div>
+                          <div class="col-md-6 text-right">
+                              <h5><b>Recipt no: {{ datacart.invoice }}</b></h5>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-12 text-left">
+                              <h6><b>Cashier : {{ namecashier }}</b></h6>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="detail p-3">
+                      <div class="row" v-for="(item, index) in datacart.detail " :key="index">
+                          <div class="col-md-5 text-left">
+                              <h5><b> {{item.nameproduct}} </b></h5>
+                          </div>
+                          <div class="col-md-1 text-right">
+                              <h5><b>{{ item.qty }}x</b></h5>
+                          </div>
+                          <div class="col-md-6 text-right">
+                              <h5><b>Rp. {{ item.subtotal }}</b></h5>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="subtotal p-3">
+                      <div class="row">
+                          <div class="col-md-6 text-left">
+                              <h5><b>PPN 10%</b></h5>
+                          </div>
+                          <div class="col-md-6 text-right">
+                              <h5><b>Rp.{{datacart.ppn}}</b></h5>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-12 text-right">
+                              <h5><b>Total : Rp.{{datacart.amount}}</b></h5>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-12 text-left">
+                              <h5><b>Payment:     Cash</b></h5>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="footer">
+                      <div class="row text-center p-4">
+                          <div class="col-md-12 p-2 print">
+                              <button class="print">Print</button>
+                          </div>
+
+                          <div class="col-md-12 p-2">
+                              Or
+                          </div>
+
+                          <div class="col-md-12 p-2 sendemail">
+                              <button class="sendemail">Send Email</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </b-modal>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import Swal from 'sweetalert2'
+
 export default {
   name: 'Cart',
   props: ['cartdata'],
   data () {
     return {
-      amount: null
+      amount: null,
+      idcashier: localStorage.getItem('iduser'),
+      namecashier: localStorage.getItem('nameuser'),
+      ppn: null,
+      datacart: null,
+      invoice: 0
     }
   },
   watch: {
@@ -56,6 +140,52 @@ export default {
       this.amount = value.reduce((item, data) => {
         return item + (data.qty * data.price)
       }, 0)
+    }
+  },
+  methods: {
+    showModal () {
+      this.invoice = 1
+      this.$refs['my-modal'].show()
+    },
+    hideModal () {
+      this.$refs['my-modal'].hide()
+    },
+    ...mapActions({
+      insertHistoryTransaction: 'history/insertHistory'
+    }),
+    checkOut () {
+      const detailData = this.cartdata.map(e => {
+        const dataDetail = {
+          idproduct: e.idproduct,
+          nameproduct: e.nameproduct,
+          qty: e.qty,
+          subtotal: `${e.price * e.qty}`
+        }
+        return dataDetail
+      })
+      const ppn = this.amount * 10 / 100
+      const data = {
+        invoice: `#${Date.now()}`,
+        ppn: ppn,
+        iduser: this.idcashier,
+        amount: `${this.amount + ppn}`,
+        detail: detailData
+      }
+      this.insertHistoryTransaction(data)
+        .then(result => {
+          this.alertSucces()
+        }).catch(err => {
+          console.log(err)
+        })
+      this.datacart = data
+      this.showModal(this.datacart)
+    },
+    alertSucces () {
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Checkout Success'
+      })
     }
   }
 }
@@ -169,6 +299,19 @@ export default {
 .main-cart-button button:nth-child(2):hover {
   color: #F24F8A;
   background-color: transparent;
+}
+.print{
+    background: #F24F8A;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.sendemail{
+    background: #57CAD5;
+    color: white;
+    border: none;
+    border-radius: 5px;
 }
 /* responsive breakpoint */
 @media screen and (max-width: 992px) {

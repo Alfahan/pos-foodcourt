@@ -59,7 +59,7 @@
                   </b-navbar-nav>
                 </div>
               </div>
-                <Cart :cartdata="cartItem" @plusdata="plusData" @mindata="minData" @closencheckout="checkOut"/>
+                <Cart :cartdata="cartItem" @plusdata="plusData" @mindata="minData"/>
             </div>
 
         </div>
@@ -72,29 +72,6 @@
         </div>
     </div>
 
-     <div class="modal-box" :style="modalToggle">
-        <div class="modal-content">
-          <div class="modal-checkout">
-            <p class="text-center"><b>Checkout</b></p>
-            <p><b>Receipt no: #010410919</b></p>
-            <button class="btn-close" @click="closeModalCheckout">x</button>
-          </div>
-          <p class="cashier-name">Cashier : Billie Elish</p>
-          <div class="list-payment" v-for="(item, index) in checkOutData" :key="index">
-            <p><b>{{item.product_name}} {{item.qty}}x</b></p>
-            <p><b>Rp. {{item.price}}</b></p>
-          </div>
-          <p class="total">
-            <b>Total: <span>Rp. {{amount}}</span></b>
-          </p>
-          <p class="payment-cash"><b>Payment: Cash</b></p>
-          <div class="btn-payment">
-            <button>Print</button>
-            <p>Or</p>
-            <button>Send Email</button>
-          </div>
-        </div>
-      </div>
   </div>
 </template>
 
@@ -116,8 +93,7 @@ export default {
   },
   data () {
     return {
-      cartItem: [],
-      amount: null
+      cartItem: []
     }
   },
   computed: {
@@ -193,10 +169,74 @@ export default {
         return el
       })
       this.cartItem = mines
-    },
-    checkOut (data) {
-      // this.checkOutData = data.
     }
   }
 }
 </script>
+
+<style scoped>
+/* modal */
+.modal-box {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(5, 5, 5, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+.modal-content {
+  width: 400px;
+  height: 80vh;
+  overflow: scroll;
+  padding: 20px;
+  border-radius: 10px;
+}
+.btn-close {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  border-radius: 25px;
+  width: 30px;
+  height: 30px;
+  outline: none;
+  border: none;
+  color: white;
+  background-color: maroon;
+  font-weight: bold;
+}
+.cashier-name {
+  margin-top: -10px;
+}
+.list-payment {
+  display: grid;
+  grid-template-columns: 3.5fr 1fr;
+}
+.btn-payment {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+  font-weight: bold;
+}
+.btn-payment p {
+  text-align: center;
+}
+.btn-payment button {
+  padding: 9px 10px;
+  font-weight: bold;
+  outline: none;
+  border: none;
+  color: white;
+  border-radius: 5px;
+}
+.btn-payment button:nth-child(1) {
+  background: #F24F8A;
+}
+.btn-payment button:nth-child(3) {
+  background: #57CAD5;
+}
+.total span {
+  margin-left: 220px;
+}
+</style>
