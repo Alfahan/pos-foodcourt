@@ -15,7 +15,7 @@
                 <div class="col-md-12 pl-4 pt-3">
                     <div class="row">
                         <div class="card m-2 shadow" style="width: 14rem;" v-for="(item, index) in allProducts.dataProducts " :key="index">
-                            <img :src="`http://localhost:3000/${item.img}`" alt="">
+                            <img :src="`http://54.164.193.160:3007/${item.img}`" alt="">
                             <div class="card-body p-2">
                                 <h5 class="card-title">{{ item.nameproduct }}</h5>
                                 <p class="card-text">Rp. {{ item.price }}</p>

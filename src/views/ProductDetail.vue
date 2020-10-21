@@ -7,7 +7,7 @@
         </div>
         <div class="row mt-5 p-4 shadow">
             <div class="col-md-4">
-              <img :src="`http://localhost:3000/${detailProduct.img}`" class="img-fluid" alt="Picture Product">
+              <img :src="`http://54.164.193.160:3007/${detailProduct.img}`" class="img-fluid" alt="Picture Product">
             </div>
             <div class="col-md-8">
                 <form v-on:submit.prevent="onUpdate">
@@ -95,6 +95,7 @@ export default {
           } else if (response === 'Image size is too big! Please upload another one with size <200kb') {
             this.alertSize()
           } else {
+            // console.log(response)
             this.alertSuccesUpdate()
             window.location = '/'
           }

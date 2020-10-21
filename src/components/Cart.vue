@@ -8,7 +8,7 @@
       </div>
       <div v-else class="cart-thereis" >
         <div class="cart-item" v-for="(item, index) in cartdata" :key="index">
-          <img  alt="cart-image" :src="`http://localhost:3000//${item.img}`"/>
+          <img  alt="cart-image" :src="`http://54.164.193.160:3007/${item.img}`"/>
           <div class="value-item-cart">
             <p>
               <b></b>
